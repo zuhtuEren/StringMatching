@@ -40,7 +40,7 @@ Doğru seçim oranım yaklaşık %60 civarında oldu.
 
 📚 Araştırmalarım
 
-Bu süreçte bazı AI modellerinden destek aldım. Özellikle GoCrazy algoritması için hibrit yaklaşım ve rolling hash tasarımı konusunda fikir aldım. Ayrıca StudentPreAnalysis stratejisinde eşik değerleri belirlerken AI modellerinden öneriler aldım. 
+Bu süreçte bazı AI modellerinden destek aldım. Özellikle GoCrazy algoritması için hibrit yaklaşım ve rolling hash tasarımı konusunda fikir aldım. Ayrıca StudentPreAnalysis stratejisinde eşik değerleri belirlerken AI modellerinden öneriler aldım. (LLM ile chat linkimi bulamadım.) 
 
 ✍️ Kendi Yolculuğum
 
