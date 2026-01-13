@@ -1,3 +1,8 @@
+// Zühtü Eren İncekara
+// 22050111023
+// Zekeriya Damcı
+// 22050111074
+
 /**
  * PreAnalysis interface for students to implement their algorithm selection logic
  * 
@@ -32,35 +37,72 @@ public abstract class PreAnalysis {
     public abstract String getStrategyDescription();
 }
 
-
 /**
- * Default implementation that students should modify
- * This is where students write their pre-analysis logic
+ * StudentPreAnalysis: Refined Strategy
+ * This version adds special cases and tighter thresholds:
+ * - Empty pattern/text handled separately
+ * - Lower threshold for repetition ratio (KMP)
+ * - GoCrazy chosen earlier for long text
+ * - BoyerMoore only for very long patterns + diverse alphabet
+ * - RabinKarp for medium patterns in medium-long text
  */
 class StudentPreAnalysis extends PreAnalysis {
-    
+
+    // Helper: repetition ratio in pattern
+    private double repetitionRatio(String pattern) {
+        int m = pattern.length();
+        if (m == 0) return 0.0;
+        int repeatCount = 0;
+        for (int i = 1; i < m; i++) {
+            if (pattern.charAt(i) == pattern.charAt(i - 1)) repeatCount++;
+        }
+        return (double) repeatCount / m;
+    }
+
+    // Helper: alphabet size in text
+    private int alphabetSize(String text) {
+        java.util.HashSet<Character> set = new java.util.HashSet<>();
+        for (char c : text.toCharArray()) set.add(c);
+        return set.size();
+    }
+
     @Override
     public String chooseAlgorithm(String text, String pattern) {
-        // TODO: Students should implement their analysis logic here
-        // 
-        // Example considerations:
-        // - If pattern is very short, Naive might be fastest
-        // - If pattern has repeating prefixes, KMP is good
-        // - If pattern is long and text is very long, RabinKarp might be good
-        // - If alphabet is small, Boyer-Moore can be very efficient
-        //
-        // For now, this returns null which means "run all algorithms"
-        // Students should replace this with their logic
-        
-        return null; // Return null to run all algorithms, or return algorithm name to use pre-analysis
+        int m = pattern.length();
+        int n = text.length();
+
+        // Special cases
+        if (m == 0 && n == 0) return "Naive"; // both empty
+        if (m == 0) return "BoyerMoore";      // empty pattern
+        if (n == 0) return "Naive";           // empty text
+        if (m > n) return "RabinKarp";        // pattern longer than text
+
+        // Very short patterns
+        if (m <= 3) return "Naive";
+
+        // Long text → GoCrazy earlier
+        if (n > 800) return "GoCrazy";
+
+        // Very long pattern + diverse alphabet
+        if (m > 15 && alphabetSize(text) > 6) return "BoyerMoore";
+
+        // Repetitive pattern → KMP (lower threshold)
+        if (repetitionRatio(pattern) > 0.15) return "KMP";
+
+        // Medium pattern + medium-long text → RabinKarp
+        if (m >= 5 && m <= 12 && n > 300) return "RabinKarp";
+
+        // Default
+        return "Naive";
     }
-    
+
     @Override
     public String getStrategyDescription() {
-        return "Default strategy - no pre-analysis implemented yet (students should implement this)";
+        return "Refined Strategy: Special cases for empty inputs, lower repetition threshold for KMP, " +
+               "GoCrazy for text >800, BoyerMoore only for very long patterns with diverse alphabet, " +
+               "RabinKarp for medium patterns in medium-long text, otherwise Naive.";
     }
 }
-
 
 /**
  * Example implementation showing how pre-analysis could work
